@@ -1,27 +1,86 @@
-# LogLens - find all your log problems fast
+# LogLens
 
-LogLens is a really simple program that tells you what's happening in your logs. It is useful for developers, IT staff, customers, and anybody who has a computer. You don't really need to know anything about log files to get started. It finds problems in your files, so you can use it to make decisions about your system. Your data is always 100% secure.
+LogLens is a local command-line Python tool that counts records in CSV log files. It allows users to count all records or filter them by a specific log level. This tool is intended for undergraduate computing students and new technical interns who have basic knowledge of CSV files and terminal commands.
 
-## Requirements and things
+## Requirements
 
-You need Python. Most computers already have it, and version 3.6 or later should be good enough. It works on Windows, Mac, and Linux. Other than that, there is not much to know.
+- Python 3.10 or newer
+- Basic knowledge of terminal commands
+- A CSV file with the required column headers
 
-## Get started
+LogLens uses only the Python standard library. No additional packages or dependencies need to be installed.
 
-First, get the project files from GitHub. Then install the program using `pip install log-lens` and run it by typing `loglens`. If you can't make it work, see docs/INSTALL.md. You probably won't need those instructions.
+## Getting Started
 
-## Using the program
+Follow the [Installation and Setup Guide](docs/INSTALL.md) to download the project files, locate the repository root, and run LogLens for the first time.
 
-Run the following command after you have found the correct folder:
+All commands should be run from the repository root, where `loglens.py` is located. Depending on your computer, you may need to use `python3` or `py` instead of `python`.
 
-`loglens --input mylog.csv --severity error`
+## Input File Format
 
-The software scans your log, fixes mistakes, and shows you what went wrong. You will see a number once it is finished. You can also run it on real production files without worrying about any side effects.
+The input must be a CSV file containing the following column headers:
 
-## Input format
+| Column | Description |
+| --- | --- |
+| `timestamp` | The time of the log entry |
+| `level` | The log level |
+| `message` | The message associated with the log entry |
 
-The input should be a CSV file. Log files tend to have fields describing the time and what happened, but LogLens is flexible and will work with whatever columns your monitoring system uses. A small example is included somewhere in this repository.
+The accepted log levels are `INFO`, `WARN`, and `ERROR`. These values must be uppercase.
 
-## Questions
+A [sample CSV file](data/sample_logs.csv) is included in the repository for testing.
 
-If something doesn't work, just contact the developers or create an issue. Make sure you describe the problem so somebody can help. This is a basic tool, so the instructions should be pretty obvious.
+## Using LogLens
+
+### Count all records
+
+To count all records in the sample CSV file, run:
+
+```bash
+python loglens.py --file data/sample_logs.csv
+```
+
+Expected output:
+
+```text
+Records matching ALL: 6
+```
+
+### Count records by log level
+
+To count only records with the `ERROR` level, run:
+
+```bash
+python loglens.py --file data/sample_logs.csv --level ERROR
+```
+
+Expected output:
+
+```text
+Records matching ERROR: 2
+```
+
+### Command-line arguments
+
+| Argument | Description | Required |
+| --- | --- | --- |
+| `--file` | Specifies the path to the input CSV file. | Yes |
+| `--level` | Filters records by `INFO`, `WARN`, or `ERROR`. | No |
+
+To view the available command-line options, run:
+
+```bash
+python loglens.py --help
+```
+
+## Limitations and Data Privacy
+
+- LogLens counts log records but does not diagnose system failures.
+- It reads the input CSV file without repairing, rewriting, or modifying it.
+- All processing takes place locally. LogLens does not upload, transmit, or store input data outside the user's computer.
+
+## Getting Help
+
+If you encounter a problem, refer to the [Troubleshooting section](docs/INSTALL.md#troubleshooting) of the installation guide.
+
+When reporting an issue on GitHub, clearly describe the problem and provide a sanitized, minimal example if needed. Do not publicly share private or sensitive log data.
